@@ -2,7 +2,7 @@ import os
 from skimage.io import imsave, imread, imshow
 from skimage.transform import resize
 from matplotlib import pyplot as plt
-from constants import key_points_max_size
+from constants import key_points_max_size, key_points_desired_size
 import json
 import numpy as np
 
@@ -41,8 +41,11 @@ def create_train():
 		img = np.array([img])
 		imgs[i] = img
 
-		kp = np.array(kp_data[image_name])
-		labels[i] = kp.flatten()
+		kp = np.array(kp_data[image_name], dtype=np.uint16)
+		kp = kp.flatten()
+		kp = kp * img_train_size[0] / key_points_desired_size[0]
+		labels[i] = kp
+		print(labels[i])
 		print(image_name)
 		i += 1
 

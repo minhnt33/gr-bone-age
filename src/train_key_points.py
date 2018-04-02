@@ -5,17 +5,18 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 import numpy as np
 from keras import backend as K
 from skimage.transform import resize, rotate
+import matplotlib.pyplot as plt
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
-batch_size = 16
+batch_size = 32
 epochs = 150
 validation_split = 0.1
 
 def preprocess(imgs):
 	imgs_p = np.ndarray((imgs.shape[0], 130, 100), dtype=np.float32)
-	# for i in range(imgs.shape[0]):
-	#     imgs_p[i] = resize(imgs[i], (130, 100), preserve_range=True)
+	for i in range(imgs.shape[0]):
+	    imgs_p[i] = resize(imgs[i], (130, 100), preserve_range=True)
 
 	imgs_p = imgs_p[..., np.newaxis]
 	return imgs_p
@@ -24,33 +25,34 @@ def get_model(input_shape):
 	inputs = Input(shape=input_shape)
 
 	# VGG Block 1
-	block1 = Conv2D(64, (3, 3), padding='same')(inputs)
+	block1 = Conv2D(64, (3, 3))(inputs)
 	block1 = Activation('elu')(block1)
 	block1 = BatchNormalization()(block1)
-	block1 = Conv2D(64, (1, 1), padding='same')(block1)
+	block1 = Conv2D(64, (1, 1))(block1)
 	block1 = Activation('elu')(block1)
 	block1 = BatchNormalization()(block1)
-	block1_pool = MaxPooling2D((3, 2), strides=(2, 2))(block1)
+	block1_pool = MaxPooling2D((3, 2))(block1)
 
 	# VGG Block 2
-	block2 = Conv2D(128, (3, 3), padding='same')(block1_pool)
+	block2 = Conv2D(128, (3, 3))(block1_pool)
 	block2 = Activation('elu')(block2)
 	block2 = BatchNormalization()(block2)
-	block2 = Conv2D(128, (1, 1), padding='same')(block2)
+	block2 = Conv2D(128, (1, 1))(block2)
 	block2 = Activation('elu')(block2)
 	block2 = BatchNormalization()(block2)
-	block2_pool = MaxPooling2D((3, 2), strides=(2, 2))(block2)
+	block2_pool = MaxPooling2D((3, 2))(block2)
 
 	# VGG Block 3
-	block3 = Conv2D(256, (3, 3), padding='same')(block2_pool)
+	block3 = Conv2D(256, (3, 3))(block2_pool)
 	block3 = Activation('elu')(block3)
 	block3 = BatchNormalization()(block3)
-	block3 = Conv2D(256, (1, 1), padding='same')(block3)
+	block3 = Conv2D(256, (1, 1))(block3)
 	block3 = Activation('elu')(block3)
 	block3 = BatchNormalization()(block3)
-	block3_pool = MaxPooling2D((3, 2), strides=(2, 2))(block3)
+	block3_pool = MaxPooling2D((3, 2))(block3)
 
-	drop1 = Dropout(0.5)(block3_pool)
+	flatten = Flatten()(block3_pool)
+	drop1 = Dropout(0.5)(flatten)
 	dense1 = Dense(512)(drop1)
 	elu1 = Activation('elu')(dense1)
 	drop2 = Dropout(0.5)(elu1)
@@ -71,9 +73,10 @@ def train():
 	print('-'*30)
 
 	model = get_model((130, 100, 1))
+	model.load_weights('model_kp.h5')
 	model.summary()
 
-	early_stopping = EarlyStopping(patience=10, verbose=1)
+	early_stopping = EarlyStopping(patience=20, verbose=1)
 	model_checkpoint = ModelCheckpoint('model_kp.h5', monitor='val_loss', save_best_only=True)
 
 	print('-'*30)
