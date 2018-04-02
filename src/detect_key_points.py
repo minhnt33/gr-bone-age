@@ -2,6 +2,7 @@ import Tkinter as tk
 from PIL import Image, ImageTk
 from constants import key_points_in_path, color_red, color_yellow, color_blue
 import os
+import os.path
 from skimage.io import imread
 from Tkinter import Frame, SUNKEN, Scrollbar, Canvas, HORIZONTAL, E, S, N, W, BOTH, ALL
 from constants import key_points_max_size, key_points_desired_size, key_points_display_size
@@ -17,6 +18,7 @@ tip_middle_finger_point = None # yellow
 tip_thumb_point = None # blue
 center_capitate_point = None # red
 point_count = 0
+ouput_path = '../key-points/key_points.json'
 
 def next_image_path():
 	global current_index
@@ -39,8 +41,15 @@ def paint_dot(x, y, color):
     x2, y2 = (x + 1), (y + 1)
     return canvas.create_oval(x1, y1, x2, y2, fill=color, outline=color, width=10)
 
+# Check output file
+if os.path.isfile(ouput_path):
+	with open(ouput_path, 'r') as file:
+		key_points_data = json.load(file)
+	current_index = key_points_data['current_index']
+
 # Get all image name
 image_names = os.listdir(key_points_in_path)
+image_names.sort()
 
 root = tk.Tk()
 
@@ -77,13 +86,13 @@ else:
 
 		key_points_data[current_image_name].append((event.x * ratio, event.y * ratio))
 		if point_count == 1:
-			print ('Middle Finger Tip')
+			#print ('Middle Finger Tip')
 			tip_middle_finger_point = paint_dot(event.x, event.y, color_yellow) 
 		elif point_count == 2:
-			print ('Thumb Tip')
+			#print ('Thumb Tip')
 			tip_thumb_point = paint_dot(event.x, event.y, color_blue)
 		elif point_count == 3:
-			print ('Center Capitate')
+			#print ('Center Capitate')
 			center_capitate_point = paint_dot(event.x, event.y, color_red)
 
 	# Show next image when press Space
@@ -111,6 +120,9 @@ else:
 
 	root.mainloop()
 
+	# Save current image index to revisit later
+	key_points_data['current_index'] = current_index
+
 	# Save to json
-	with open('key_points.json', 'w') as output:
+	with open(ouput_path, 'w') as output:
 		json.dump(key_points_data, output)

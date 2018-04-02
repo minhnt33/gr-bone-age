@@ -1,5 +1,24 @@
 from keras.models import Model
-from keras.layers import Input, Conv2D, Dense, Dropout, MaxPooling2D
+from keras.layers import Input, Conv2D, Dense, Dropout, MaxPooling2D, Activation, BatchNormalization, Flatten
+from data_key_points import load_train
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+import numpy as np
+from keras import backend as K
+from skimage.transform import resize, rotate
+
+K.set_image_data_format('channels_last')  # TF dimension ordering in this code
+
+batch_size = 16
+epochs = 150
+validation_split = 0.1
+
+def preprocess(imgs):
+	imgs_p = np.ndarray((imgs.shape[0], 130, 100), dtype=np.float32)
+	# for i in range(imgs.shape[0]):
+	#     imgs_p[i] = resize(imgs[i], (130, 100), preserve_range=True)
+
+	imgs_p = imgs_p[..., np.newaxis]
+	return imgs_p
 
 def get_model(input_shape):
 	inputs = Input(shape=input_shape)
@@ -40,9 +59,42 @@ def get_model(input_shape):
 	dense3 = Dense(6)(elu2)
 
 	model = Model(inputs=inputs, outputs=dense3)
-	model.compile(optimizer='adam', loss='mean_squared_error', metrics=['acc'])
+	model.compile(optimizer='adam', loss='mean_squared_error')
 	return model
 
 def train():
-	
+	X_train, Y_train = load_train()
+	X_train = preprocess(X_train)
+
+	print('-'*30)
+	print('Creating and compiling model...')
+	print('-'*30)
+
+	model = get_model((130, 100, 1))
+	model.summary()
+
+	early_stopping = EarlyStopping(patience=10, verbose=1)
+	model_checkpoint = ModelCheckpoint('model_kp.h5', monitor='val_loss', save_best_only=True)
+
+	print('-'*30)
+	print('Fitting model...')
+	print('-'*30)
+
+	history = model.fit(X_train, Y_train, batch_size=batch_size, epochs=epochs, verbose=1, shuffle=True,
+	     validation_split=validation_split,
+	     callbacks=[model_checkpoint, early_stopping])
+
+	print(history.history.keys())
+	# summarize history for loss
+	plt.plot(history.history['loss'])
+	plt.plot(history.history['val_loss'])
+	plt.title('model loss')
+	plt.ylabel('loss')
+	plt.xlabel('epoch')
+	plt.legend(['train', 'validation'], loc='upper left')
+	plt.show()
+	pass
+
+if __name__ == '__main__':
+	train()
 	pass
