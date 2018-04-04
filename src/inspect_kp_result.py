@@ -5,17 +5,20 @@ import os
 import os.path
 from skimage.io import imread
 from Tkinter import Frame, SUNKEN, Scrollbar, Canvas, HORIZONTAL, E, S, N, W, BOTH, ALL
-from constants import key_points_max_size, key_points_desired_size, key_points_display_size, kp_json_path
+from constants import key_points_max_size, key_points_desired_size, key_points_display_size, kp_json_path, kp_train_path, kp_test_path
 import numpy as np
 from skimage.io import imread
 from skimage.transform import resize
 import json
+import shutil
+import os.path
 
 current_index = -1
 current_image_name = 'None'
 tip_middle_finger_point = None # yellow
 tip_thumb_point = None # blue
 center_capitate_point = None # red
+kp_json = {}
 
 # ratio used to convert coordinate to display size
 ratio = 1.0 * key_points_display_size[0] / key_points_desired_size[0]
@@ -45,8 +48,15 @@ def paint_dot(x, y, color):
 image_names = os.listdir(kp_test_path)
 image_names.sort()
 
+# train_named = os.listdir(kp_train_path)
+
+
 # Load kp
 kps = np.load('kp_resutl.npy')
+
+# Load current train kp json
+with open(kp_json_path, 'r') as file:
+	kp_json = json.load(file)
 
 root = tk.Tk()
 
@@ -64,7 +74,7 @@ else:
 
 	kp = kps[current_index]
 	kp *= ratio
-	print(kp)
+
 	# Paint dots
 	tip_middle_finger_point = paint_dot(kp[0], kp[1], color_yellow)
 	tip_thumb_point = paint_dot(kp[2], kp[3], color_blue)
@@ -88,7 +98,7 @@ else:
 			
 			kp = kps[current_index]
 			kp *= ratio
-			print(kp)
+
 			# Paint dots
 			tip_middle_finger_point = paint_dot(kp[0], kp[1], color_yellow)
 			tip_thumb_point = paint_dot(kp[2], kp[3], color_blue)
@@ -96,7 +106,21 @@ else:
 		else:
 			print("Done")
 
+	def choose_to_train(event):
+		global current_image_name
+		kp = kps[current_index]
+		kp /= ratio
+		rounded_kp = [ round(coord, 2) for coord in kp ]
+		kp_json[current_image_name] = rounded_kp;
+
+		with open(kp_json_path, 'w') as file:
+			json.dump(kp_json, file)
+
+		shutil.move(os.path.join(kp_test_path,  current_image_name), kp_train_path)
+		show_next_image(event)
+
 	# Next image
+	canvas.bind("<Button 1>",choose_to_train)
 	root.bind("<space>", show_next_image)
 
 	root.mainloop()

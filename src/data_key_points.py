@@ -102,18 +102,21 @@ def load_test():
 if __name__ == '__main__':
 	#fix keypoint
 	# data = {}
+	# flatten_data = {}
 	# with open(kp_json_path, 'r') as file:
 	# 	data = json.load(file)
 	# #"1617.png": [[310, 64]
 	# for key in data:
 	# 	if key != 'current_index':
 	# 		coors = data[key]
-	# 		for coor in coors:
-	# 			coor[0] /= 1.3
-	# 			coor[1] /= 1.3
+	# 		coors = np.array(coors, dtype=np.float32)
+	# 		coors = coors.flatten().tolist()
+	# 		flatten_data[key] = coors
 
-	# with open(kp_json_path, 'w') as file:
-	# 	json.dump(data, file)
+	# flatten_data['current_index'] = data['current_index']
+
+	# with open('key-points-flat.json', 'w') as file:
+	# 	json.dump(flatten_data, file)
 	create_train()
 	create_test()
 	pass

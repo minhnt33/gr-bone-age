@@ -66,7 +66,6 @@ else:
 
 	kp = kps[current_image_name]
 	kp = np.array(kp, dtype=np.float32)
-	kp = kp.flatten()
 	kp *= ratio
 	print(kp)
 	# Paint dots
@@ -92,7 +91,6 @@ else:
 
 			kp = kps[current_image_name]
 			kp = np.array(kp, dtype=np.float32)
-			kp = kp.flatten()
 			kp *= ratio
 			print(kp)
 			# Paint dots

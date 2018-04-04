@@ -11,7 +11,7 @@ from constants import kp_train_row, kp_train_col
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 batch_size = 32
-epochs = 150
+epochs = 300
 validation_split = 0.1
 input_shape = (kp_train_row, kp_train_col, 1)
 
@@ -75,7 +75,7 @@ def train():
 	print('-'*30)
 
 	model = get_model(input_shape)
-	# model.load_weights('model_kp.h5')
+	model.load_weights('model_kp.h5')
 	model.summary()
 
 	early_stopping = EarlyStopping(patience=15, verbose=1)

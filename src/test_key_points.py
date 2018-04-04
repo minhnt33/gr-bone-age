@@ -23,7 +23,7 @@ kps = model.predict(imgs, verbose=1, batch_size=batch_size)
 for kp in kps:
 	kp *= 16.0
 	pass
-print(kps)
+
 np.save('kp_resutl.npy', kps)
 
 # i = 0
