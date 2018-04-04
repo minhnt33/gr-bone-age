@@ -6,17 +6,19 @@ import numpy as np
 from keras import backend as K
 from skimage.transform import resize, rotate
 import matplotlib.pyplot as plt
+from constants import kp_train_row, kp_train_col
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
 batch_size = 32
 epochs = 150
 validation_split = 0.1
+input_shape = (kp_train_row, kp_train_col, 1)
 
 def preprocess(imgs):
-	imgs_p = np.ndarray((imgs.shape[0], 130, 100), dtype=np.float32)
+	imgs_p = np.ndarray((imgs.shape[0], kp_train_row, kp_train_col), dtype=np.float32)
 	for i in range(imgs.shape[0]):
-	    imgs_p[i] = resize(imgs[i], (130, 100), preserve_range=True)
+		imgs_p[i] = resize(imgs[i], (kp_train_row, kp_train_col), preserve_range=True)
 
 	imgs_p = imgs_p[..., np.newaxis]
 	return imgs_p
@@ -72,11 +74,11 @@ def train():
 	print('Creating and compiling model...')
 	print('-'*30)
 
-	model = get_model((130, 100, 1))
-	model.load_weights('model_kp.h5')
+	model = get_model(input_shape)
+	# model.load_weights('model_kp.h5')
 	model.summary()
 
-	early_stopping = EarlyStopping(patience=20, verbose=1)
+	early_stopping = EarlyStopping(patience=15, verbose=1)
 	model_checkpoint = ModelCheckpoint('model_kp.h5', monitor='val_loss', save_best_only=True)
 
 	print('-'*30)

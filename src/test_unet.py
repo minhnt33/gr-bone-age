@@ -3,9 +3,8 @@ from keras.models import Model
 from data_unet import load_test_data, desired_size
 from train_unet import preprocess, batch_size
 import os
-from skimage.transform import resize
 from skimage.io import imsave
-from constants import img_cols, img_rows, mask_raw_path, get_unet
+from constants import mask_raw_path, get_unet
 
 print('-'*30)
 print('Loading and preprocessing test data...')
@@ -40,6 +39,5 @@ if not os.path.exists(mask_raw_path):
 mask_size = (desired_size, desired_size)
 for image, image_id in zip(imgs_mask_test, imgs_id_test):
     image = (image[:, :, 0])
-    #image = resize(image, output_shape=mask_size)
     print(image_id)
     imsave(os.path.join(mask_raw_path, str(image_id) + '.png'), image)

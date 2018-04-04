@@ -18,9 +18,13 @@ unet_mask_val_path = '../mask/unet-mask/validation'
 mask_raw_path = '../mask/mask-raw'
 mask_good_raw_path = '../mask/mask-good-raw'
 mask_final_path = '../mask/mask-final'
-key_points_in_path = '../key-points/train'
+kp_train_path = '../key-points/train'
+kp_test_path = '../key-points/test'
+kp_json_path = '../key-points/key_points.json'
 augmented_train_path = '../mask/mask-aug'
-# augmented_mask_path = '../mask/mask-aug'
+kp_train_row = 130
+kp_train_col = 100
+constrast = 0.01
 
 def get_unet():
 	return get_unet_512(input_shape=(img_rows, img_cols, 1))

@@ -9,9 +9,7 @@ from skimage.transform import resize
 from skimage.exposure import equalize_adapthist
 from matplotlib import pyplot as plt
 import math
-from constants import img_rows, img_cols, unet_train_path, unet_test_path, unet_mask_path, desired_size, unet_mask_val_path, unet_train_val_path
-
-constrast = 0.03
+from constants import img_rows, img_cols, unet_train_path, unet_test_path, unet_mask_path, desired_size, unet_mask_val_path, unet_train_val_path, constrast
 
 def make_square_image(img, desired_size=128):
     h = float(img.shape[0])
@@ -46,7 +44,7 @@ def create_train_data():
         
         img = resize(img, output_shape=(img_rows, img_cols), preserve_range=True)
         img /= 255
-	#img = equalize_adapthist(img, clip_limit=constrast)
+        #img = equalize_adapthist(img, clip_limit=constrast)
 
         if i == 0:
             imshow(img)
@@ -106,7 +104,7 @@ def create_test_data():
         img = make_square_image(img, desired_size=desired_size)
         img = resize(img, output_shape=(img_rows, img_cols), preserve_range=True)	
         img /= 255
-	img = equalize_adapthist(img, clip_limit=constrast)
+        img = equalize_adapthist(img, clip_limit=constrast)
         if i == 0:
             imshow(img)
             plt.show()
