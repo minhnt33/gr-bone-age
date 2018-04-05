@@ -53,7 +53,7 @@ def train():
     model = get_unet()
     model.load_weights('unet.h5')
     model.summary()
-    early_stopping = EarlyStopping(patience=20, verbose=1)
+    early_stopping = EarlyStopping(patience=10, verbose=1)
     model_checkpoint = ModelCheckpoint('unet.h5', monitor='val_loss', save_best_only=True)
 
     print('-'*30)

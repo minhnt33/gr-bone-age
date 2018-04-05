@@ -48,10 +48,10 @@ def create_train_data():
         img /= 255.0
         #img = equalize_adapthist(img, clip_limit=constrast)
 
-        if i == 0:
-            imshow(img)
-            plt.show()
-            pass
+        #if i == 0:
+        #    imshow(img)
+        #    plt.show()
+        #    pass
         img = np.array([img], dtype=np.float32)
         imgs[i] = img
         i += 1
@@ -67,10 +67,10 @@ def create_train_data():
         img_mask = resize(img_mask, output_shape=(img_rows, img_cols), preserve_range=True)
         img_mask /= 255.0
 
-        if i == 0:
-            imshow(img_mask)
-            plt.show()
-            pass
+        #if i == 0:
+        #    imshow(img_mask)
+        #    plt.show()
+        #    pass
         img_mask = np.array([img_mask], dtype=np.float32)
         imgs_mask[i] = img_mask
         i += 1
@@ -107,11 +107,11 @@ def create_test_data():
         img = make_square_image(img, desired_size=desired_size)
         img = resize(img, output_shape=(img_rows, img_cols), preserve_range=True)	
         img /= 255.0
-        #img = equalize_adapthist(img, clip_limit=constrast)
-        if i == 0:
-            imshow(img)
-            plt.show()
-            pass
+        img = equalize_adapthist(img, clip_limit=constrast)
+        #if i == 0:
+        #    imshow(img)
+        #    plt.show()
+        #    pass
         img = np.array([img], dtype=np.float32)
         imgs[i] = img
         imgs_id[i] = img_id
