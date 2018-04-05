@@ -15,7 +15,7 @@ def make_square_image(img, desired_size=128):
     h = float(img.shape[0])
     w = float(img.shape[1])
     if h > desired_size or w > desired_size:
-        ratio = (h / desired_size) if (h >= w) else (w / desired_size)
+        ratio = 1.0 * (h / desired_size) if (h >= w) else 1.0 * (w / desired_size)
         h /= ratio
         w /= ratio
         h = int(math.floor(h))
@@ -43,14 +43,14 @@ def create_train_data():
             pass
         
         img = resize(img, output_shape=(img_rows, img_cols), preserve_range=True)
-        img /= 255
+        img /= 255.0
         #img = equalize_adapthist(img, clip_limit=constrast)
 
         if i == 0:
             imshow(img)
             plt.show()
             pass
-        img = np.array([img])
+        img = np.array([img], dtype=np.float32)
         imgs[i] = img
         i += 1
 
@@ -63,13 +63,13 @@ def create_train_data():
             pass        
             
         img_mask = resize(img_mask, output_shape=(img_rows, img_cols), preserve_range=True)
-        img_mask /= 255
+        img_mask /= 255.0
 
         if i == 0:
             imshow(img_mask)
             plt.show()
             pass
-        img_mask = np.array([img_mask])
+        img_mask = np.array([img_mask], dtype=np.float32)
         imgs_mask[i] = img_mask
         i += 1
 
@@ -94,7 +94,7 @@ def create_test_data():
         h = float(img.shape[0])
         w = float(img.shape[1])
         if h > desired_size or w > desired_size:
-            ratio = (h / desired_size) if (h >= w) else (w / desired_size)
+            ratio = 1.0 * (h / desired_size) if (h >= w) else 1.0 * (w / desired_size)
             h /= ratio
             w /= ratio
             h = int(math.floor(h))
@@ -103,13 +103,13 @@ def create_test_data():
 
         img = make_square_image(img, desired_size=desired_size)
         img = resize(img, output_shape=(img_rows, img_cols), preserve_range=True)	
-        img /= 255
-        img = equalize_adapthist(img, clip_limit=constrast)
+        img /= 255.0
+        #img = equalize_adapthist(img, clip_limit=constrast)
         if i == 0:
             imshow(img)
             plt.show()
             pass
-        img = np.array([img])
+        img = np.array([img], dtype=np.float32)
         imgs[i] = img
         imgs_id[i] = img_id
         i += 1
@@ -132,4 +132,4 @@ def load_test_data():
 
 if __name__ == '__main__':
     create_train_data()
-    create_test_data()
+    #create_test_data()

@@ -34,10 +34,10 @@ def train():
 
     X_train, Y_train = load_train_data()
 
-    # imshow(X_train[0])
-    # plt.show()
-    # imshow(Y_train[0])
-    # plt.show()
+    #imshow(X_train[0])
+    #plt.show()
+    #imshow(Y_train[0])
+    #plt.show()
 
     X_train = preprocess(X_train)
     Y_train = preprocess(Y_train)
@@ -51,9 +51,9 @@ def train():
     print('Creating and compiling model...')
     print('-'*30)
     model = get_unet()
-    #model.load_weights('unet.h5')
+    model.load_weights('unet.h5')
     model.summary()
-    early_stopping = EarlyStopping(patience=10, verbose=1)
+    early_stopping = EarlyStopping(patience=20, verbose=1)
     model_checkpoint = ModelCheckpoint('unet.h5', monitor='val_loss', save_best_only=True)
 
     print('-'*30)
