@@ -29,7 +29,7 @@ def make_square_image(img, desired_size=128):
 def create_train_data():    
     images = os.listdir(unet_train_path)
     masks = os.listdir(unet_mask_path)
-    images.sort()
+    images.sort() # Very important to sort the file before processing. It helps maintain pair between image and mask
     masks.sort()
     total = len(images)
 
@@ -54,6 +54,7 @@ def create_train_data():
             pass
         img = np.array([img], dtype=np.float32)
         imgs[i] = img
+        print(image_name)
         i += 1
 
     i = 0
@@ -73,6 +74,7 @@ def create_train_data():
             pass
         img_mask = np.array([img_mask], dtype=np.float32)
         imgs_mask[i] = img_mask
+        print('Mask ' + mask_name)
         i += 1
 
     print('Loading done.')
@@ -115,6 +117,7 @@ def create_test_data():
         img = np.array([img], dtype=np.float32)
         imgs[i] = img
         imgs_id[i] = img_id
+        print(image_name)
         i += 1
 
     print('Loading done.')
