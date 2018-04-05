@@ -7,6 +7,7 @@ from keras import backend as K
 from skimage.transform import resize, rotate
 import matplotlib.pyplot as plt
 from constants import kp_train_row, kp_train_col
+from keras.optimizers import Adam
 
 K.set_image_data_format('channels_last')  # TF dimension ordering in this code
 
@@ -63,7 +64,7 @@ def get_model(input_shape):
 	dense3 = Dense(6)(elu2)
 
 	model = Model(inputs=inputs, outputs=dense3)
-	model.compile(optimizer='adam', loss='mean_squared_error')
+	model.compile(optimizer=Adam(0.001), loss='mean_squared_error')
 	return model
 
 def train():

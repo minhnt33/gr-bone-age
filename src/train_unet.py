@@ -5,7 +5,6 @@ from skimage.io import imsave, imshow
 import numpy as np
 from keras.models import Model
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, BatchNormalization, Input, merge, UpSampling2D, Cropping2D, ZeroPadding2D, Reshape, core, Convolution2D, Activation
-from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras import backend as K
 from keras.layers.merge import concatenate

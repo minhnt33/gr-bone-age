@@ -12,7 +12,7 @@ def preprocessing_image(image):
 	max_size_img = np.zeros(key_points_max_size, dtype=np.float32)
 	max_size_img[:image.shape[0], :image.shape[1]] = image
 	max_size_img = resize(max_size_img, output_shape=(kp_train_row, kp_train_col), preserve_range=True)
-	max_size_img /= 255
+	max_size_img /= 255.0
 	return max_size_img
 
 def create_train():
@@ -21,7 +21,7 @@ def create_train():
 	total = len(images)
 	kp_data = {}
 	imgs = np.ndarray((total, kp_train_row, kp_train_col), dtype=np.float32)
-	labels = np.ndarray((total, 6), dtype=np.uint16)
+	labels = np.ndarray((total, 6), dtype=np.float32)
 
 	#Load label
 	with open(kp_json_path, 'r') as f:
@@ -38,18 +38,8 @@ def create_train():
 		img = imread(os.path.join(kp_train_path, image_name), as_grey=True)
 		img = preprocessing_image(img)
 
-		img = np.array([img])
+		img = np.array([img], dtype=np.float32)
 		imgs[i] = img
-
-		# if i == 0:
-		# 	radius = 5
-		# 	print(kp)
-		# 	cv2.circle(img, center=(kp[0], kp[1]), radius=radius, color=(255,255,255), thickness=1)
-		# 	cv2.imshow(img)
-		# 	cv2.waitKey(0)
-			# imshow(img)
-			# plt.show()
-
 		print(image_name)
 		i += 1
 
@@ -72,14 +62,15 @@ def create_test():
 	    img_id = int(image_name.split('.')[0])
 	    img = imread(os.path.join(kp_test_path, image_name), as_grey=True)
 	    img = preprocessing_image(img)
-	    img = equalize_adapthist(img, clip_limit=constrast)
+	    # img = equalize_adapthist(img, clip_limit=constrast)
 	    if i == 0:
 	        imshow(img)
 	        plt.show()
 	        pass
-	    img = np.array([img])
+	    img = np.array([img], dtype=np.float32)
 	    imgs[i] = img
 	    imgs_id[i] = img_id
+	    print(image_name)
 	    i += 1
 
 	print('Loading done.')
