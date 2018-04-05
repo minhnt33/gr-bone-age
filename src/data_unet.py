@@ -57,6 +57,9 @@ def create_train_data():
         print(image_name)
         i += 1
 
+    np.save('imgs_train.npy', imgs)
+    print('Saving train image to .npy done.')
+
     i = 0
     for mask_name in masks:
         img_mask = imread(os.path.join(unet_mask_path, mask_name), as_grey=True)
@@ -77,11 +80,8 @@ def create_train_data():
         print('Mask ' + mask_name)
         i += 1
 
-    print('Loading done.')
-
-    np.save('imgs_train.npy', imgs)
     np.save('imgs_mask_train.npy', imgs_mask)
-    print('Saving train data to .npy files done.')
+    print('Saving train mask to .npy done.')
 
 def create_test_data():
     images = os.listdir(unet_test_path)
