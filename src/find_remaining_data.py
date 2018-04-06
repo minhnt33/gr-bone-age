@@ -2,16 +2,13 @@
 
 import os
 import shutil
-
-full_data_set_path = '/root/Desktop/minh/boneage-training-dataset'
-train_path = '../mask/unet-train/train'
-test_path = '../mask/unet-test'
+from constants import full_data_path, unet_train_path, unet_test_path
 
 # list train file names
-ignore_images = os.listdir(train_path)
+ignore_images = os.listdir(unet_train_path)
 
 # list all data set file names
-full_data = os.listdir(full_data_set_path)
+full_data = os.listdir(full_data_path)
 
 remaining_data = []
 
@@ -20,5 +17,5 @@ for image_name in full_data:
 		remaining_data.append(image_name)
 
 for remaining_image in remaining_data:
-	shutil.copy(os.path.join(full_data_set_path, remaining_image), os.path.join(test_path, remaining_image))
+	shutil.copy(os.path.join(full_data_path, remaining_image), os.path.join(unet_test_path, remaining_image))
 	print(remaining_image)
