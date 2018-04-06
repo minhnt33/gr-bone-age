@@ -2,7 +2,7 @@ import os
 from skimage.io import imsave, imread, imshow
 from skimage.transform import resize
 from matplotlib import pyplot as plt
-from constants import key_points_max_size, key_points_desired_size, kp_train_path, kp_test_path, kp_json_path, constrast, kp_train_row, kp_train_col
+from constants import key_points_max_size, key_points_desired_size, kp_train_path, kp_test_path, kp_manual_json_path, kp_json_path, constrast, kp_train_row, kp_train_col
 import json
 import numpy as np
 from skimage.exposure import equalize_adapthist
@@ -63,10 +63,10 @@ def create_test():
 	    img = imread(os.path.join(kp_test_path, image_name), as_grey=True)
 	    img = preprocessing_image(img)
 	    # img = equalize_adapthist(img, clip_limit=constrast)
-	    if i == 0:
-	        imshow(img)
-	        plt.show()
-	        pass
+	    # if i == 0:
+	    #     imshow(img)
+	    #     plt.show()
+	    #     pass
 	    img = np.array([img], dtype=np.float32)
 	    imgs[i] = img
 	    imgs_id[i] = img_id

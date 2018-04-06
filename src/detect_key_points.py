@@ -1,11 +1,10 @@
 import Tkinter as tk
 from PIL import Image, ImageTk
-from constants import key_points_in_path, color_red, color_yellow, color_blue
+from constants import color_red, color_yellow, color_blue, key_points_max_size, key_points_desired_size, key_points_display_size, kp_manual_path
 import os
 import os.path
 from skimage.io import imread
 from Tkinter import Frame, SUNKEN, Scrollbar, Canvas, HORIZONTAL, E, S, N, W, BOTH, ALL
-from constants import key_points_max_size, key_points_desired_size, key_points_display_size
 import numpy as np
 from skimage.io import imread
 from skimage.transform import resize
@@ -18,7 +17,7 @@ tip_middle_finger_point = None # yellow
 tip_thumb_point = None # blue
 center_capitate_point = None # red
 point_count = 0
-ouput_path = '../key-points/key_points.json'
+ouput_path = '../key-points/manual_key_points.json'
 
 def next_image_path():
 	global current_index
@@ -26,7 +25,7 @@ def next_image_path():
 	current_index += 1
 	current_image_name = image_names[current_index]
 	root.title(current_image_name)
-	return os.path.join(key_points_in_path, current_image_name)
+	return os.path.join(kp_manual_path, current_image_name)
 
 def preprocessing_image(image):
 	max_size_img = np.zeros(key_points_max_size, dtype=np.float32)
@@ -48,7 +47,7 @@ if os.path.isfile(ouput_path):
 	current_index = key_points_data['current_index']
 
 # Get all image name
-image_names = os.listdir(key_points_in_path)
+image_names = os.listdir(kp_manual_path)
 image_names.sort()
 
 root = tk.Tk()
@@ -84,7 +83,8 @@ else:
 
 		point_count += 1
 
-		key_points_data[current_image_name].append((event.x * ratio, event.y * ratio))
+		key_points_data[current_image_name].append(event.x * ratio)
+		key_points_data[current_image_name].append(event.y * ratio)
 		if point_count == 1:
 			#print ('Middle Finger Tip')
 			tip_middle_finger_point = paint_dot(event.x, event.y, color_yellow) 
