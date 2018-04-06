@@ -1,3 +1,5 @@
+# Preparing data for training and testing unet model 
+
 from __future__ import print_function
 import matplotlib
 #matplotlib.use('Agg') # Set to prevent matplotlib from using the Xwindows backend on server
@@ -9,7 +11,7 @@ from skimage.transform import resize
 from skimage.exposure import equalize_adapthist
 from matplotlib import pyplot as plt
 import math
-from constants import img_rows, img_cols, unet_train_path, unet_test_path, unet_mask_path, desired_size, unet_mask_val_path, unet_train_val_path, constrast
+from constants import data_root_path, img_rows, img_cols, unet_train_path, unet_test_path, unet_mask_path, desired_size, unet_mask_val_path, unet_train_val_path, constrast
 
 def make_square_image(img, desired_size=128):
     h = float(img.shape[0])
@@ -57,7 +59,7 @@ def create_train_data():
         print(image_name)
         i += 1
 
-    np.save('imgs_train.npy', imgs)
+    np.save(os.path.join(data_root_path, 'imgs_train.npy'), imgs)
     print('Saving train image to .npy done.')
 
     i = 0
@@ -80,7 +82,7 @@ def create_train_data():
         print('Mask ' + mask_name)
         i += 1
 
-    np.save('imgs_mask_train.npy', imgs_mask)
+    np.save(os.path.join(data_root_path, 'imgs_mask_train.npy'), imgs_mask)
     print('Saving train mask to .npy done.')
 
 def create_test_data():
@@ -122,20 +124,20 @@ def create_test_data():
 
     print('Loading done.')
 
-    np.save('imgs_test.npy', imgs)
-    np.save('imgs_id_test.npy', imgs_id)
+    np.save(os.path.join(data_root_path, 'imgs_test.npy'), imgs)
+    np.save(os.path.join(data_root_path, 'imgs_id_test.npy'), imgs_id)
     print('Saving test data to .npy files done.')
 
 def load_train_data():
-    imgs_train = np.load('imgs_train.npy')
-    imgs_mask_train = np.load('imgs_mask_train.npy')
+    imgs_train = np.load(os.path.join(data_root_path, 'imgs_train.npy'))
+    imgs_mask_train = np.load(os.path.join(data_root_path, 'imgs_mask_train.npy'))
     return imgs_train, imgs_mask_train
 
 def load_test_data():
-    imgs_test = np.load('imgs_test.npy')
-    imgs_id = np.load('imgs_id_test.npy')
+    imgs_test = np.load(os.path.join(data_root_path, 'imgs_test.npy'))
+    imgs_id = np.load(os.path.join(data_root_path, 'imgs_id_test.npy'))
     return imgs_test, imgs_id
 
 if __name__ == '__main__':
-    create_train_data()
+    # create_train_data()
     create_test_data()

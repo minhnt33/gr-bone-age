@@ -23,6 +23,7 @@ kp_test_path = '../key-points/test'
 kp_json_path = '../key-points/key_points.json'
 kp_manual_path = '../key-points/manual'
 kp_manual_json_path = '../key-points/manual_key_points.json'
+data_root_path = '/home/minh'
 augmented_train_path = '../mask/mask-aug'
 kp_train_row = 130
 kp_train_col = 100
