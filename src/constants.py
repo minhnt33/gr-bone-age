@@ -21,6 +21,7 @@ mask_final_path = '../mask/mask-final'
 kp_train_path = '../key-points/train'
 kp_test_path = '../key-points/test'
 kp_json_path = '../key-points/key_points.json'
+data_root_path = '/home/minh'
 augmented_train_path = '../mask/mask-aug'
 kp_train_row = 130
 kp_train_col = 100

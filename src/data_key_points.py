@@ -2,7 +2,7 @@ import os
 from skimage.io import imsave, imread, imshow
 from skimage.transform import resize
 from matplotlib import pyplot as plt
-from constants import key_points_max_size, key_points_desired_size, kp_train_path, kp_test_path, kp_json_path, constrast, kp_train_row, kp_train_col
+from constants import data_root_path, key_points_max_size, key_points_desired_size, kp_train_path, kp_test_path, kp_json_path, constrast, kp_train_row, kp_train_col
 import json
 import numpy as np
 from skimage.exposure import equalize_adapthist
@@ -43,8 +43,8 @@ def create_train():
 		print(image_name)
 		i += 1
 
-	np.save('kp_train.npy', imgs)
-	np.save('kp_label.npy', labels)
+	np.save(os.path.join(data_root_path, 'kp_train.npy'), imgs)
+	np.save(os.path.join(data_root_path, 'kp_label.npy'), labels)
 	
 	print('Saving key points train data to .npy file done.')
 	pass
@@ -75,19 +75,19 @@ def create_test():
 
 	print('Loading done.')
 
-	np.save('kp_imgs_test.npy', imgs)
-	np.save('kp_imgs_id_test.npy', imgs_id)
+	np.save(os.path.join(data_root_path, 'kp_imgs_test.npy'), imgs)
+	np.save(os.path.join(data_root_path, 'kp_imgs_id_test.npy'), imgs_id)
 	print('Saving kp test data to .npy files done.')
 	pass
 
 def load_train():
-	images = np.load('kp_train.npy')
-	labels = np.load('kp_label.npy')
+	images = np.load(os.path.join(data_root_path, 'kp_train.npy'))
+	labels = np.load(os.path.join(data_root_path, 'kp_label.npy'))
 	return images, labels
 
 def load_test():
-	imgs = np.load('kp_imgs_test.npy')
-	ids = np.load('kp_imgs_id_test.npy')
+	imgs = np.load(os.path.join(data_root_path, 'kp_imgs_test.npy'))
+	ids = np.load(os.path.join(data_root_path, 'kp_imgs_id_test.npy'))
 	return imgs, ids
 
 if __name__ == '__main__':
