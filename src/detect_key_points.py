@@ -41,7 +41,7 @@ def paint_dot(x, y, color):
     return canvas.create_oval(x1, y1, x2, y2, fill=color, outline=color, width=10)
 
 # Check output file
-if os.path.isfile(ouput_path):
+if os.path.isfile(ouput_path): 
 	with open(ouput_path, 'r') as file:
 		key_points_data = json.load(file)
 	current_index = key_points_data['current_index']

@@ -18,6 +18,7 @@ def preprocessing_image(image):
 def create_train():
 	# Load train images
 	images = os.listdir(kp_train_path)
+	images.sort()
 	total = len(images)
 	kp_data = {}
 	imgs = np.ndarray((total, kp_train_row, kp_train_col), dtype=np.float32)
@@ -31,7 +32,7 @@ def create_train():
 	i = 0
 	for image_name in images:
 		kp = np.array(kp_data[image_name], dtype=np.float32)
-		kp = kp.flatten()
+		# kp = kp.flatten()
 		kp *= ratio
 		labels[i] = kp
 
@@ -108,6 +109,6 @@ if __name__ == '__main__':
 
 	# with open('key-points-flat.json', 'w') as file:
 	# 	json.dump(flatten_data, file)
-	create_train()
+	# create_train()
 	create_test()
 	pass

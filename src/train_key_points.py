@@ -64,7 +64,7 @@ def get_model(input_shape):
 	dense3 = Dense(6)(elu2)
 
 	model = Model(inputs=inputs, outputs=dense3)
-	model.compile(optimizer=Adam(0.001), loss='mean_squared_error')
+	model.compile(optimizer=Adam(0.00001), loss='mean_squared_error')
 	return model
 
 def train():
@@ -79,7 +79,7 @@ def train():
 	model.load_weights('model_kp.h5')
 	model.summary()
 
-	early_stopping = EarlyStopping(patience=15, verbose=1)
+	early_stopping = EarlyStopping(patience=20, verbose=1)
 	model_checkpoint = ModelCheckpoint('model_kp.h5', monitor='val_loss', save_best_only=True)
 
 	print('-'*30)
